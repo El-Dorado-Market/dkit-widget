@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dKit</title>
+</head>
+
+<body>
+  <style>
+    #dkit {
+      --dkit-height: 800px;
+      --dkit-width: 400px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+    }
+
+    #dkit-toggle {
+      background: url('https://raw.githubusercontent.com/El-Dorado-Market/dkit-logo/refs/heads/main/dkit.svg');
+      border: none;
+      height: 50px;
+      transition: all 0.2s ease;
+      width: 50px;
+    }
+
+    #dkit-dex {
+      border-radius: 5px;
+      height: var(--dkit-height);
+      opacity: 0;
+      position: absolute;
+      right: 0px;
+      top: calc(-1 * var(--dkit-height) - 10px);
+      transform-origin: bottom right;
+      transform: scale(0);
+      transition: all 0.4s ease-in-out;
+      visibility: hidden;
+      width: var(--dkit-width);
+    }
+
+    #dkit-toggle:hover {
+      transform: scale(1.1);
+    }
+  </style>
+  <div id="dkit">
+    <iframe id="dkit-dex"
+      src="https://dex.dkit.xyz/swap?affiliate=dy&affiliateFee=50&amount=1&in=sol.sol&out=sol.dorito-fgwto1nfarqtpg3o74sykti753capfhnxhg8ckeddpmg"
+      frameborder="0" width="400" height="800"></iframe>
+    <button id="dkit-toggle" aria-label="dkit"></button>
+  </div>
+  <script>
+    const dex = document.getElementById('dkit-dex')
+    const toggle = document.getElementById('dkit-toggle')
+    toggle.addEventListener('click', () => {
+      if(dex.style.visibility === 'visible') {
+        dex.style.visibility = 'hidden'
+        dex.style.opacity = 0
+        dex.style.transform = 'scale(0)'
+        return
+      }
+      dex.style.visibility = 'visible'
+      dex.style.opacity = 1
+      dex.style.transform = 'scale(1)'
+    })
+  </script>
+</body>
+
+</html>
