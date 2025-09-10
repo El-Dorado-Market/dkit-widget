@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configure dKit Widget</title>
+</head>
+
+<body>
+  <style>
+    #affiliate {
+      display: flex;
+      gap: 1rem;
+    }
+
+    #affiliate label {
+      flex-grow: 1;
+    }
+
+    body {
+      padding-bottom: 20rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    #networks label {
+      flex-direction: row;
+    }
+
+    #output {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    #submit {
+      margin-right: auto;
+    }
+
+    #swap {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    #theme {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    #wallet {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+    }
+  </style>
+  <form>
+    <fieldset id="theme">
+      <legend>Theme</legend>
+      <label>
+        Title
+        <input name="title" placeholder="dKit" type="text" />
+      </label>
+      <label>
+        Logo URL
+        <input name="logo" placeholder="https://dkit.xyz/logo.svg" type="text" />
+      </label>
+      <label>
+        Background Color (URL encoded)
+        <input name="background" placeholder="%23ffe224" type="text" />
+      </label>
+    </fieldset>
+    <fieldset id="affiliate">
+      <legend>Affiliate</legend>
+      <label>
+        Affiliate Name
+        <input name="affiliate" placeholder="dkit" type="text" />
+      </label>
+      <label>
+        Affiliate Fee BPS
+        <input name="affiliateBps" placeholder="50" type="text" />
+      </label>
+    </fieldset>
+    <fieldset id="swap">
+      <legend>Initial Swap Params</legend>
+      <label>
+        Input Asset
+        <input name="in" placeholder="sol.sol" type="text" value="sol.sol" />
+      </label>
+      <label>
+        Output Asset
+        <input name="out" placeholder="sol.dorito-fgwto1nfarqtpg3o74sykti753capfhnxhg8ckeddpmg" type="text"
+          value="sol.dorito-fgwto1nfarqtpg3o74sykti753capfhnxhg8ckeddpmg" />
+      </label>
+      <label>
+        Input Amount
+        <input name="amount" placeholder="1" type="text" value="1" />
+      </label>
+    </fieldset>
+    <fieldset id="wallet">
+      <legend>Auto Connect Wallet</legend>
+      <label>
+        Wallet Identifier
+        <select name="wallet">
+          <option value="">No wallet</option>
+          <option value="ctrl">CTRL</option>
+          <option value="keplr">Keplr</option>
+          <option value="keystore">Keystore</option>
+          <option value="leap">Leap</option>
+          <option value="metamask">Metamask</option>
+          <option value="phantom">Phantom</option>
+          <option value="talisman">Talisman</option>
+          <option value="vultisig">Vultisig</option>
+        </select>
+      </label>
+    </fieldset>
+    <fieldset id="networks">
+      <legend>
+        Auto Connect with Networks
+      </legend>
+      <label><input name="arb" type="checkbox" />Arbitrum</label>
+      <label><input name="avax" type="checkbox" />Avalanche</label>
+      <label><input name="base" type="checkbox" />Base</label>
+      <label><input name="bch" type="checkbox" />Bitcoin Cash</label>
+      <label><input name="bsc" type="checkbox" />BNB Smart Chain</label>
+      <label><input name="btc" type="checkbox" />Bitcoin</label>
+      <label><input name="dash" type="checkbox" />Dash</label>
+      <label><input name="doge" type="checkbox" />Doge</label>
+      <label><input name="dot" type="checkbox" />Polkadot</label>
+      <label><input name="eth" type="checkbox" />Ethereum</label>
+      <label><input name="gaia" type="checkbox" />Cosmos Hub</label>
+      <label><input name="kuji" type="checkbox" />Kujira</label>
+      <label><input name="ltc" type="checkbox" />Litecoin</label>
+      <label><input name="matic" type="checkbox" />Polygon</label>
+      <label><input name="maya" type="checkbox" />Mayachain</label>
+      <label><input name="op" type="checkbox" />Optimism</label>
+      <label><input name="sol" type="checkbox" />Solana</label>
+      <label><input name="thor" type="checkbox" />Thorchain</label>
+      <label><input name="xrd" type="checkbox" />Radix</label>
+      <label><input name="zec" type="checkbox" />Zcash</label>
+    </fieldset>
+    <input id="submit" type="submit" value="Configure Widget" />
+    <fieldset id="output">
+      <legend>Output</legend>
+      <label>Style<textarea id="output-style" rows="10"></textarea></label>
+      <label>HTML<textarea id="output-html" rows="6"></textarea></label>
+      <label>Script<textarea id="output-script"
+          rows="5">&lt;script&gt;let dex=document.getElementById("dkit-dex"),toggle=document.getElementById("dkit-toggle");toggle.addEventListener("click",()=>{"visible"===dex.style.visibility?(dex.style.visibility="hidden",dex.style.opacity=0,dex.style.transform="scale(0)"):(dex.style.visibility="visible",dex.style.opacity=1,dex.style.transform="scale(1)")});&lt;/script&gt;</textarea></label>
+    </fieldset>
+  </form>
+  <script>
+    const form = document.querySelector('form')
+    const outputStyle = document.getElementById('output-style')
+    const outputHtml = document.getElementById('output-html')
+    const outputScript = document.getElementById('output-script')
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const data = new FormData(form)
+      console.dir({ formData: Array.from(data.entries()) });
+      const style = '<style>#dkit{--dkit-height:800px;--dkit-padding:10px;--dkit-size:50px;--dkit-width:400px;bottom:var(--dkit-padding);height:var(--dkit-size);position:fixed;right:var(--dkit-padding);width:var(--dkit-size)}#dkit-toggle{animation:5s ease-out infinite dkit-pulse;background:url(${logo});border:none;height:100%;padding:0;width:100%}#dkit-dex{border-radius:5px;bottom:calc(var(--dkit-size) + var(--dkit-padding));height:var(--dkit-height);max-height:calc(100dvh - 3 * var(--dkit-padding) - var(--dkit-size));max-width:calc(100dvw - 2 * var(--dkit-padding));opacity:0;position:absolute;right:0;transform-origin:bottom right;transform:scale(0);transition:all .4s ease-in-out;visibility:hidden;width:var(--dkit-width)}@keyframes dkit-pulse{0%{transform:scale(1)}5%{transform:scale(1.1)}10%{transform:scale(1)}100%{transform:scale(1)}}<style/>'
+      const styleWithLogo = style.replace('${logo}', data.get('logo') || 'https://raw.githubusercontent.com/El-Dorado-Market/dkit-logo/refs/heads/main/dkit.svg')
+      outputStyle.value = styleWithLogo
+      const url = new URL('https://dex.dkit.xyz/swap')
+      url.searchParams.set('affiliate', data.get('affiliate') || 'dkit')
+      url.searchParams.set('affiliateBps', data.get('affiliateBps') || '0')
+      url.searchParams.set('title', data.get('title') || 'dKit')
+      url.searchParams.set('bg', data.get('bg') || '%23ffe224')
+      url.searchParams.set('in', data.get('in'))
+      url.searchParams.set('out', data.get('out'))
+      url.searchParams.set('amount', data.get('amount'))
+      if(data.get('wallet')) {
+        url.searchParams.set('wallet', data.get('wallet'))
+      }
+      const allNetworks = ['arb', 'avax', 'base', 'bch', 'bsc', 'btc', 'dash', 'doge', 'dot', 'eth', 'gaia', 'kuji', 'ltc', 'matic', 'maya', 'op', 'sol', 'thor', 'xrd', 'zec']
+      const selectedNetworks = allNetworks.reduce((networks, network) => {
+        return data.get(network) === 'on' && networks.concat(network) || networks
+      }, []).join(',')
+      if(selectedNetworks) {
+        url.searchParams.set('chains', selectedNetworks)
+      }
+      const html = '<div id="dkit"><iframe id="dkit-dex" src="${url}" frameborder="0"></iframe><button id="dkit-toggle" aria-label="dkit"></button></div>'
+      outputHtml.value = html.replace('${url}', url.toString())
+    })
+    const copy = (e) => {
+      e.target.select()
+      navigator.clipboard.writeText(e.target.value).then(() => {
+        console.log(e.target.id, "Copied to clipboard!");
+      });
+    }
+    outputStyle.addEventListener('click', copy)
+    outputHtml.addEventListener('click', copy)
+    outputScript.addEventListener('click', copy)
+  </script>
+</body>
+
+</html>
