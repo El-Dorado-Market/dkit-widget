@@ -12,35 +12,37 @@
     #dkit {
       --dkit-height: 800px;
       --dkit-padding: 10px;
+      --dkit-size: 50px;
       --dkit-width: 400px;
-      --dkit-toggle-size: 50px;
-      position: fixed;
       bottom: var(--dkit-padding);
+      height: var(--dkit-size);
+      position: fixed;
       right: var(--dkit-padding);
+      width: var(--dkit-size);
     }
 
     #dkit-toggle {
       animation: 5000ms ease-out infinite dkit-pulse;
       background: url('https://raw.githubusercontent.com/El-Dorado-Market/dkit-logo/refs/heads/main/dkit.svg');
       border: none;
-      height: var(--dkit-toggle-size);
+      height: 100%;
       padding: 0;
-      width: var(--dkit-toggle-size);
+      width: 100%;
     }
 
     #dkit-dex {
       border-radius: 5px;
-      max-height: calc(100dvh - 3 * var(--dkit-padding) - var(--dkit-toggle-size));
+      bottom: calc(var(--dkit-size) + var(--dkit-padding));
       height: var(--dkit-height);
+      max-height: calc(100dvh - 3 * var(--dkit-padding) - var(--dkit-size));
+      max-width: calc(100dvw - 2 * var(--dkit-padding));
       opacity: 0;
       position: absolute;
       right: 0px;
-      bottom: calc(var(--dkit-toggle-size) + var(--dkit-padding));
       transform-origin: bottom right;
       transform: scale(0);
       transition: all 0.4s ease-in-out;
       visibility: hidden;
-      max-width: calc(100dvw - 2 * var(--dkit-padding));
       width: var(--dkit-width);
     }
 
