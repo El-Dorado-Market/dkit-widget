@@ -28,20 +28,28 @@
       gap: 2rem;
     }
 
+    label:has(> input[type="checkbox"]) {
+      flex-direction: row;
+    }
+
     label {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
     }
 
-    #networks label {
-      flex-direction: row;
-    }
-
     #output {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+    }
+
+    label:has(> #output-style) {
+      visibility: hidden;
+    }
+
+    label:has(> #output-script) {
+      visibility: hidden;
     }
 
     #submit {
@@ -55,9 +63,10 @@
     }
 
     #theme {
+      align-items: end;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
     }
 
     #wallet {
@@ -78,8 +87,20 @@
         <input name="logo" placeholder="https://dkit.xyz/logo.svg" type="text" />
       </label>
       <label>
+        Height
+        <input name="height" placeholder="800px" type="text" value="800px" />
+      </label>
+      <label>
+        Width
+        <input name="width" placeholder="400px" type="text" value="400px" />
+      </label>
+      <label>
         Background Color (URL encoded)
         <input name="background" placeholder="%23ffe224" type="text" />
+      </label>
+      <label>
+        <input name="standalone" type="checkbox" />
+        Standalone
       </label>
     </fieldset>
     <fieldset id="affiliate">
@@ -154,8 +175,8 @@
     <input id="submit" type="submit" value="Configure Widget" />
     <fieldset id="output">
       <legend>Output</legend>
-      <label>Style<textarea id="output-style" rows="10"></textarea></label>
       <label>HTML<textarea id="output-html" rows="6"></textarea></label>
+      <label>Style<textarea id="output-style" rows="10"></textarea></label>
       <label>Script<textarea id="output-script"
           rows="5">&lt;script&gt;let dex=document.getElementById("dkit-dex"),toggle=document.getElementById("dkit-toggle");toggle.addEventListener("click",()=>{"visible"===dex.style.visibility?(dex.style.visibility="hidden",dex.style.opacity=0,dex.style.transform="scale(0)"):(dex.style.visibility="visible",dex.style.opacity=1,dex.style.transform="scale(1)")});&lt;/script&gt;</textarea></label>
     </fieldset>
@@ -169,16 +190,23 @@
       e.preventDefault()
       const data = new FormData(form)
       console.dir({ formData: Array.from(data.entries()) });
-      const style = '<style>#dkit{--dkit-height:800px;--dkit-padding:10px;--dkit-size:50px;--dkit-width:400px;bottom:var(--dkit-padding);height:var(--dkit-size);position:fixed;right:var(--dkit-padding);width:var(--dkit-size)}#dkit-toggle{animation:5s ease-out infinite dkit-pulse;background:url(${logo});border:none;height:100%;padding:0;width:100%}#dkit-dex{border-radius:5px;bottom:calc(var(--dkit-size) + var(--dkit-padding));height:var(--dkit-height);max-height:calc(100dvh - 3 * var(--dkit-padding) - var(--dkit-size));max-width:calc(100dvw - 2 * var(--dkit-padding));opacity:0;position:absolute;right:0;transform-origin:bottom right;transform:scale(0);transition:all .4s ease-in-out;visibility:hidden;width:var(--dkit-width)}@keyframes dkit-pulse{0%{transform:scale(1)}5%{transform:scale(1.1)}10%{transform:scale(1)}100%{transform:scale(1)}}<style/>'
-      const styleWithLogo = style.replace('${logo}', data.get('logo') || 'https://raw.githubusercontent.com/El-Dorado-Market/dkit-logo/refs/heads/main/dkit.svg')
-      outputStyle.value = styleWithLogo
+      const style = '<style>#dkit{--dkit-height:${height};--dkit-padding:10px;--dkit-size:50px;--dkit-width:${width};bottom:var(--dkit-padding);height:var(--dkit-size);position:fixed;right:var(--dkit-padding);width:var(--dkit-size)}#dkit-toggle{animation:5s ease-out infinite dkit-pulse;background:url(${logo});border:none;height:100%;padding:0;width:100%}#dkit-dex{border-radius:5px;bottom:calc(var(--dkit-size) + var(--dkit-padding));height:var(--dkit-height);max-height:calc(100dvh - 3 * var(--dkit-padding) - var(--dkit-size));max-width:calc(100dvw - 2 * var(--dkit-padding));opacity:0;position:absolute;right:0;transform-origin:bottom right;transform:scale(0);transition:all .4s ease-in-out;visibility:hidden;width:var(--dkit-width)}@keyframes dkit-pulse{0%{transform:scale(1)}5%{transform:scale(1.1)}10%{transform:scale(1)}100%{transform:scale(1)}}<style/>'
+      const height = data.get('height') || '800px'
+      const width = data.get('width') || '400px'
+      if(!data.get('standalone')) {
+        outputStyle.parentElement.style.visibility = 'visible'
+        outputStyle.value = style
+          .replace('${height}', height)
+          .replace('${logo}', data.get('logo') || 'https://raw.githubusercontent.com/El-Dorado-Market/dkit-logo/refs/heads/main/dkit.svg')
+          .replace('${width}', width)
+      }
       const url = new URL('https://dex.dkit.xyz/swap')
-      url.searchParams.set('affiliate', data.get('affiliate') || 'dkit')
+      url.searchParams.set('affiliate', data.get('affiliate') || 'dy')
       url.searchParams.set('affiliateBps', data.get('affiliateBps') || '0')
       url.searchParams.set('title', data.get('title') || 'dKit')
-      url.searchParams.set('bg', data.get('bg') || '%23ffe224')
-      url.searchParams.set('in', data.get('in'))
-      url.searchParams.set('out', data.get('out'))
+      url.searchParams.set('bg', data.get('bg') || '%23333333')
+      url.searchParams.set('in', data.get('in') || 'sol.sol')
+      url.searchParams.set('out', data.get('out') || 'sol.dorito-fgwto1nfarqtpg3o74sykti753capfhnxhg8ckeddpmg')
       url.searchParams.set('amount', data.get('amount'))
       if(data.get('wallet')) {
         url.searchParams.set('wallet', data.get('wallet'))
@@ -190,8 +218,16 @@
       if(selectedNetworks) {
         url.searchParams.set('chains', selectedNetworks)
       }
-      const html = '<div id="dkit"><iframe id="dkit-dex" src="${url}" frameborder="0"></iframe><button id="dkit-toggle" aria-label="dkit"></button></div>'
-      outputHtml.value = html.replace('${url}', url.toString())
+      const iframe = '<iframe id="dkit-dex" src="${url}" frameborder="0" height="${height}" width="${width}"></iframe>'
+      const html = '<div id="dkit">${iframe}<button id="dkit-toggle" aria-label="dkit"></button></div>'
+      const configuredIframe = iframe
+        .replace('${height}', height)
+        .replace('${width}', width)
+        .replace('${url}', url.toString())
+      outputHtml.value = data.get('standalone') && configuredIframe || html.replace('${iframe}', configuredIframe)
+      if(!data.get('standalone')) {
+        outputScript.parentElement.style.visibility = 'visible'
+      }
     })
     const copy = (e) => {
       e.target.select()
