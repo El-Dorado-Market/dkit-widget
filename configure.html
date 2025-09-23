@@ -200,7 +200,7 @@
           .replace('${logo}', data.get('logo') || 'https://raw.githubusercontent.com/El-Dorado-Market/dkit-logo/refs/heads/main/dkit.svg')
           .replace('${width}', width)
       }
-      const url = new URL('https://dex.dkit.xyz/swap')
+      const url = new URL('https://dev-dex.dkit.xyz/swap')
       url.searchParams.set('affiliate', data.get('affiliate') || 'dy')
       url.searchParams.set('affiliateBps', data.get('affiliateBps') || '0')
       url.searchParams.set('title', data.get('title') || 'dKit')
